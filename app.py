@@ -1,4 +1,4 @@
-"""Siftly Bookmarks — AI-organized Twitter bookmark dashboard."""
+"""Bookmarks — AI-organized Twitter bookmark dashboard."""
 
 import json
 import html as html_lib
@@ -15,8 +15,8 @@ from ai_search import cached_ai_search, remaining_searches, get_api_key, MAX_AI_
 DATA_DIR = Path(__file__).parent / "data"
 
 st.set_page_config(
-    page_title="Siftly Bookmarks",
-    page_icon="🔖",
+    page_title="Bookmarks",
+    page_icon="📑",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -136,32 +136,32 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-.stApp { background-color: #0a0e17; }
+.stApp { background-color: #101010; }
 
 .brand {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600; font-size: 1.2rem;
-    letter-spacing: 0.08em; color: #f5a623;
+    letter-spacing: 0.08em; color: #c8c8c8;
     margin-bottom: 0.1rem;
 }
 .brand-sub {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; color: #556b8a;
+    font-size: 0.7rem; color: #6b6b6b;
     margin-bottom: 1rem;
 }
 
 .bookmark-card {
-    background: #111827;
-    border: 1px solid #1e2d4a;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
     border-radius: 8px;
     padding: 1rem 1.15rem;
     margin-bottom: 0.7rem;
     transition: background 0.15s;
 }
-.bookmark-card:hover { background: #1a2234; }
+.bookmark-card:hover { background: #222222; }
 
 .bookmark-text {
-    color: #e2e8f0;
+    color: #d4d4d4;
     font-size: 0.88rem;
     line-height: 1.65;
     white-space: pre-wrap;
@@ -170,11 +170,11 @@ st.markdown("""
 
 .bookmark-meta {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem; color: #556b8a;
+    font-size: 0.72rem; color: #6b6b6b;
     margin-top: 0.5rem;
 }
-.bookmark-meta a { color: #5b9ef5; text-decoration: none; }
-.bookmark-meta a:hover { text-decoration: underline; }
+.bookmark-meta a { color: #9a9a9a; text-decoration: none; }
+.bookmark-meta a:hover { text-decoration: underline; color: #b0b0b0; }
 
 .cat-badge {
     display: inline-block;
@@ -194,18 +194,18 @@ st.markdown("""
 
 .stat-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem; color: #556b8a;
+    font-size: 0.68rem; color: #6b6b6b;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
 .ai-match-reason {
-    background: #1a2234;
-    border-left: 3px solid #f5a623;
+    background: #1e1e1e;
+    border-left: 3px solid #7a7a7a;
     padding: 0.6rem 1rem;
     margin-bottom: 0.8rem;
     font-size: 0.82rem;
-    color: #a0aec0;
+    color: #9a9a9a;
     border-radius: 0 6px 6px 0;
 }
 
@@ -272,7 +272,7 @@ all_categories = get_all_categories(all_bookmarks)
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 
 with st.sidebar:
-    st.markdown('<div class="brand">SIFTLY BOOKMARKS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="brand">BOOKMARKS</div>', unsafe_allow_html=True)
     st.markdown(
         f'<div class="brand-sub">{len(all_bookmarks)} tweets &middot; '
         f'{len(all_categories)} categories</div>',
@@ -294,7 +294,7 @@ with st.sidebar:
             "AI Search", placeholder="Semantic search with Haiku...", key="ai_input"
         )
         ai_clicked = st.button("🔍 Search with AI", use_container_width=True, disabled=remaining <= 0)
-        color = "#556b8a" if remaining > 5 else ("#f59e0b" if remaining > 0 else "#ef4444")
+        color = "#6b6b6b" if remaining > 5 else ("#999999" if remaining > 0 else "#b0b0b0")
         st.markdown(
             f'<div class="ai-counter" style="color:{color};">'
             f'{remaining}/{MAX_AI_SEARCHES} AI searches remaining</div>',
@@ -354,7 +354,7 @@ with st.sidebar:
     st.download_button(
         "📥 Download CSV",
         csv_data,
-        "siftly_bookmarks.csv",
+        "bookmarks_export.csv",
         "text/csv",
         use_container_width=True,
     )
@@ -406,7 +406,7 @@ with tab_stats:
         for c in all_categories
     ])
     if not cat_df.empty:
-        st.bar_chart(cat_df.set_index("Category")["Count"], horizontal=True, color="#f5a623")
+        st.bar_chart(cat_df.set_index("Category")["Count"], horizontal=True, color="#8a8a8a")
 
     st.markdown("---")
     st.subheader("Timeline")
@@ -424,4 +424,4 @@ with tab_stats:
         timeline_df = pd.DataFrame(
             [{"Date": d, "Bookmarks": c} for d, c in sorted(date_counts.items())]
         )
-        st.bar_chart(timeline_df.set_index("Date"), color="#f5a623")
+        st.bar_chart(timeline_df.set_index("Date"), color="#8a8a8a")
