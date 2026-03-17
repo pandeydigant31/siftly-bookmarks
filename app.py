@@ -24,10 +24,28 @@ st.set_page_config(
 # ── Data loading ──────────────────────────────────────────────────────────────
 
 
+def _normalize(b: dict) -> dict:
+    """Normalize bookmark fields to a consistent schema.
+
+    The raw export uses: id, handle, author, timestamp, media
+    The app expects:     tweetId, authorHandle, authorName, tweetCreatedAt, mediaItems
+
+    This mapper handles both formats so the rest of the app is schema-agnostic.
+    """
+    return {
+        **b,
+        "tweetId": b.get("tweetId") or b.get("id", ""),
+        "authorHandle": b.get("authorHandle") or b.get("handle", "unknown"),
+        "authorName": b.get("authorName") or b.get("author", ""),
+        "tweetCreatedAt": b.get("tweetCreatedAt") or b.get("timestamp", ""),
+        "mediaItems": b.get("mediaItems") or b.get("media", []),
+    }
+
+
 @st.cache_data
 def load_bookmarks() -> list[dict]:
     with open(DATA_DIR / "bookmarks.json") as f:
-        return json.load(f)
+        return [_normalize(b) for b in json.load(f)]
 
 
 @st.cache_data

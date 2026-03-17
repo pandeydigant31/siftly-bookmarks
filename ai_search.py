@@ -35,7 +35,7 @@ def _raw_search(query: str, bookmarks: list[dict]) -> dict:
     import anthropic
 
     digest = "\n".join(
-        f"- [{b['tweetId']}] {b['text'][:200]} "
+        f"- [{b.get('tweetId') or b.get('id', '')}] {b.get('text', '')[:200]} "
         f"(categories: {', '.join(c['name'] for c in b.get('categories', []))})"
         for b in bookmarks
     )
